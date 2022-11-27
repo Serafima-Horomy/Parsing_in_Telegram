@@ -1,0 +1,54 @@
+	// подстановка копирайта при копировании в буфер обмена
+	var div4copy;
+	var pagelink = "<p>Подробнее: <a href='"+document.location.href+"?ref=123'>"+document.location.href+"</a></p>";
+
+	function create_div4copy() {
+		var newdiv = document.createElement('DIV');
+		document.body.appendChild(newdiv);
+		newdiv.style.overflow="hidden";
+		newdiv.style.width="1px";
+		newdiv.style.height="1px";
+		newdiv.style.position="absolute";
+		newdiv.style.top="-999px";
+		newdiv.style.left="-999px";
+		newdiv.innerHTML='';
+		return newdiv;
+	}
+	function clipboard_addLink() {
+		console.log("clipboard_addLink");
+		if (!window.getSelection) return;
+		var selection = window.getSelection();
+		var range = selection.getRangeAt(0);
+
+		div4copy=create_div4copy()
+		div4copy.appendChild (range.cloneContents());
+		range3=range.cloneRange();
+		selection.removeAllRanges();
+
+		div4copy.innerHTML+= pagelink;
+		var range2 = document.createRange();
+		range2.selectNode(div4copy);
+		selection.addRange(range2);
+
+		window.setTimeout( function() {
+			selection.removeAllRanges();
+			selection.addRange(range3);
+			document.body.removeChild(div4copy);
+		}, 0);
+	}
+	// /подстановка копирайта при копировании в буфер обмена
+
+	// определяем элементы которым повесим обработчик события
+	a=document.getElementsByTagName("DIV");
+	c=a.length;
+	for (i=0; i<c; i++) {
+//		if (a[i].className=='content' || a[i].className.indexOf("NewsBody")>-1) {
+		console.log(a[i].className);
+		if (a[i].className=='container cpb') {
+			 if (a[i].attachEvent) {
+				a[i].attachEvent("oncopy", clipboard_addLink);
+			} else if(a[i].addEventListener) {
+				a[i].addEventListener("copy", clipboard_addLink, false);
+			}
+		}
+	}

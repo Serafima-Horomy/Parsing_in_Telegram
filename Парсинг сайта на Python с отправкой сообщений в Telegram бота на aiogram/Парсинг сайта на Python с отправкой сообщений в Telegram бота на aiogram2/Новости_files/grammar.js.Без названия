@@ -1,0 +1,167 @@
+//назначаем обработчик нажатия на Ctrl + Enter
+$(document).keydown(function (e) {
+	if (e.keyCode == 27) {
+		document.getElementById("errorModal").style.display = 'none';
+	} // esc (does not work)
+
+	//если посетитель нажал Ctrl + Enter…
+	if (e.ctrlKey && e.keyCode == 13) {
+		console.log("ctrl+enter");
+			$('#grammar_result_message').html('');
+			$('#errorModalForm').show();
+
+			//…ищем выделенный текст…
+			var insertBefore=" !!! ";
+			var insertAfter=" !!! ";
+			var hq="https://www.securitylab.ru/";
+			var _4=" !!! ";
+			var _5=" !!! ";
+
+			var _6=60;
+			var max_width=500;
+			var _9="css";
+			var _a=0;
+			var w=window;
+			var d=w.document;
+			var de=d.documentElement;
+			var b=d.body;
+			var _f=null;
+			var _10={};
+			var _11=false;
+			var _12="";
+			var _4e=function(result){
+				return (""+result).replace(/[\r\n]+/g," ").replace(/^\s+|\s+$/g,"");
+			};
+//			var _50=function(){
+
+			var _29=function(){
+				var _2a=0,_2b=0;
+				if(typeof (w.innerWidth)=="number"){
+					_2a=w.innerWidth;
+					_2b=w.innerHeight;
+				}else{
+					if(de&&(de.clientWidth||de.clientHeight)){
+						_2a=de.clientWidth;
+						_2b=de.clientHeight;
+					}else{
+						if(b&&(b.clientWidth||b.clientHeight)){
+							_2a=b.clientWidth;
+							_2b=b.clientHeight;
+						}
+					}
+				}
+		
+				var _2c=0,_2d=0;
+				if(typeof (w.pageYOffset)=="number"){
+					_2d=w.pageYOffset;
+					_2c=w.pageXOffset;
+				}else{
+					if(b&&(b.scrollLeft||b.scrollTop)){
+						_2d=b.scrollTop;
+						_2c=b.scrollLeft;
+					}else{
+						if(de&&(de.scrollLeft||de.scrollTop)){
+							_2d=de.scrollTop;
+							_2c=de.scrollLeft;
+						}
+					}
+				}return{
+					w:_2a,h:_2b,x:_2c,y:_2d
+				};
+			};
+			var cut_f=function(){
+				try{
+					var _51=null;
+					var _52=null;
+					if(w.getSelection){
+						_52=w.getSelection();
+					}else{
+						if(d.getSelection){
+							_52=d.getSelection();
+						}else{
+							_52=d.selection;
+						}
+					}
+			
+					var _53=null;
+					if(_52!=null){
+						var pre="",_51=null,suf="",pos=-1;
+						if(_52.getRangeAt){
+							var r=_52.getRangeAt(0);
+							_51=r.toString();
+							var _58=d.createRange();
+							_58.setStartBefore(r.startContainer.ownerDocument.body);
+							_58.setEnd(r.startContainer,r.startOffset);
+							pre=_58.toString();
+							var _59=r.cloneRange();
+							_59.setStart(r.endContainer,r.endOffset);
+							_59.setEndAfter(r.endContainer.ownerDocument.body);
+							suf=_59.toString();
+						}else{
+							if(_52.createRange){
+								var r=_52.createRange();
+								_51=r.text;
+								var _58=_52.createRange();
+								_58.moveStart("character",-_6);
+								_58.moveEnd("character",-_51.length);
+								pre=_58.text;
+								var _59=_52.createRange();
+								_59.moveEnd("character",_6);
+								_59.moveStart("character",_51.length);
+								suf=_59.text;
+							}else{
+								_51=""+_52;
+							}
+						}
+						var p;
+						var s=(p=_51.match(/^(\s*)/))&&p[0].length;
+						var e=(p=_51.match(/(\s*)$/))&&p[0].length;
+						pre=pre+_51.substring(0,s);
+						suf=_51.substring(_51.length-e,_51.length)+suf;
+						_51=_51.substring(s,_51.length-e);
+						if(_51==""){
+							return null;
+						}return{
+							pre:pre,text:_51,suf:suf,pos:pos
+						};
+					}else{
+						alert("Извините, неизваестная ошибка...");
+						return;
+					}
+				}catch(e){
+					return null;
+				}
+			};
+		
+			var cut=cut_f();
+			if(!cut){
+				return;
+			}
+			with(cut){
+				pre=pre.substring(pre.length-_6,pre.length).replace(/^\S{1,10}\s+/,"");
+				suf=suf.substring(0,_6).replace(/\s+\S{1,10}$/,"");
+			}
+			var result=(cut.pre+insertBefore+cut.text+insertAfter+cut.suf);
+			console.log(result);
+			if(result.length>max_width){
+				alert("Выделено очень много символов");
+				return;
+			}
+
+			$('#text_error').val(result);
+			$('#text_referer').val(window.location.href);
+			$('#errorModal').modal('show');
+
+		}
+	}
+);
+
+function CloseErrorWindow(){
+	console.log("CloseErrorWindow");
+	$('#errorModal').modal('hide');
+	$('#text_error').val('');
+	$('#text_referer').val('');
+	$('#grammar_result_message').html('');
+	$('#errorModalForm').show();
+	
+}
