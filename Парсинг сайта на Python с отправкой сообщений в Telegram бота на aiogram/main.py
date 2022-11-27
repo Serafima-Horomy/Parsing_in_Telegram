@@ -30,6 +30,7 @@ def get_first_news():
         article_id = article_url.split("/")[-1]
         article_id = article_id[:-4]
 
+        # print(f"{article_title} | {article_url} | {article_date_timestamp}")
 
         news_dict[article_id] = {
             "article_date_timestamp": article_date_timestamp,
@@ -94,10 +95,9 @@ def check_news_update():
 
 
 def main():
-
+    # get_first_news()
     print(check_news_update())
 
 
-#if __name__ == '__main__':
-#    main()
-get_first_news()
+if __name__ == '__main__':
+    main()
