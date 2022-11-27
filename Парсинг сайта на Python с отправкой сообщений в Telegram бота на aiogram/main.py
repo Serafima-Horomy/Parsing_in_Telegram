@@ -98,6 +98,6 @@ def main():
     print(check_news_update())
 
 
-if __name__ == '__main__':
-    main()
+#if __name__ == '__main__':
+#    main()
 get_first_news()
